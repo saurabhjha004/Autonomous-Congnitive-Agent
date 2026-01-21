@@ -1,106 +1,95 @@
-project:
-  name: Autonomous Cognitive Engine
-  domain: GenAI / Autonomous Agents
-  purpose: >
-    An autonomous cognitive engine for deep research and long-horizon
-    task execution, designed to simulate how modern AI agents operate
-    in enterprise and research environments.
+# Autonomous Cognitive Engine
 
-problem_statement:
-  description: >
-    Build an autonomous cognitive engine that can understand high-level
-    goals, decompose them into sub-tasks, execute steps autonomously using
-    tools, maintain memory, evaluate its own outputs, and escalate to
-    humans when confidence is low.
+An autonomous cognitive engine for deep research and long-horizon task execution.
 
-system_architecture:
-  execution_flow:
-    - user_goal
-    - planner_agent
-    - executor_agent:
-        uses:
-          - external_tools
-          - fallback_knowledge
-    - vector_memory_rag
-    - reflection_agent
-    - evaluation_gate:
-        outcomes:
-          - human_escalation
-          - synthesis_agent
-    - final_output
+**Deployed:** https://congnitive-agent.streamlit.app/
 
-core_capabilities:
-  planning: autonomous_task_decomposition
-  execution: multi_step_autonomous_execution
-  tools: web_search_with_fallback
-  memory: vector_based_memory_rag
-  reasoning: reflection_and_self_evaluation
-  safety: human_in_the_loop_escalation
-  interface: streamlit_ui
+---
 
-agents:
-  planner_agent:
-    role: >
-      Breaks high-level goals into structured research-oriented sub-tasks.
+## Overview
 
-  executor_agent:
-    role: >
-      Executes planned tasks using external tools and deterministic fallback
-      strategies when tools fail or return insufficient data.
+The system simulates how AI agents plan tasks, use tools, maintain memory, evaluate confidence, and escalate to humans when needed.
 
-  reflection_agent:
-    role: >
-      Evaluates evidence sufficiency and diversity to assess confidence.
+### Core Capabilities
 
-  evaluator_agent:
-    role: >
-      Decides whether the system should proceed to synthesis or escalate
-      to a human.
+| Capability | Description |
+|------------|-------------|
+| Task Decomposition | Breaks goals into executable steps |
+| Multi-Step Execution | Executes tasks sequentially |
+| Tool Integration | Uses external tools with fallback logic |
+| Vector Memory (RAG) | Stores and retrieves evidence |
+| Self-Evaluation | Assesses confidence and evidence quality |
+| Human Escalation | Escalates when confidence is low |
 
-  synthesis_agent:
-    role: >
-      Produces a grounded executive-style summary based on stored memory.
+---
 
-memory_system:
-  type: vector_memory
-  purpose: >
-    Store and retrieve evidence using embeddings to enable grounded
-    reasoning and reduce hallucinations.
-  visibility: exposed_to_user_via_ui
+## Architecture
+```mermaid
+flowchart TD
+    A[User Goal] --> B[Planner Agent]
+    B --> C[Executor Agent]
+    C --> D[External Tools]
+    D --> E[Memory RAG]
+    E --> F[Reflection Agent]
+    F --> G[Evaluation Gate]
+    G -->|Low Confidence| H[Human Escalation]
+    G -->|High Confidence| I[Synthesis Agent]
+    I --> J[Final Output]
+```
 
-safety_and_guardrails:
-  controls:
-    - bounded_execution_steps
-    - reflection_based_quality_checks
-    - tool_failure_handling
-    - explicit_human_escalation
+### Agents
 
-cost_awareness:
-  strategies:
-    - limited_execution_steps
-    - controlled_tool_invocation
-    - no_unbounded_llm_loops
+- **Planner**: Decomposes goals into tasks
+- **Executor**: Executes tasks using tools
+- **Reflection**: Evaluates evidence quality
+- **Evaluator**: Decides escalation vs. synthesis
+- **Synthesis**: Produces grounded summaries
 
-execution_interfaces:
-  cli:
-    command: python src/main.py
-  ui:
-    framework: streamlit
-    command: streamlit run app_streamlit.py
-    capabilities:
-      - dynamic_goal_input
-      - execution_status_display
-      - executive_summary_view
-      - memory_inspection
-      - escalation_visibility
+---
 
-deployment_notes:
-  local_execution: supported
-  streamlit_cloud: compatible
-  service_ready: true
-  deployed_url: https://congnitive-agent.streamlit.app/
+## Safety Controls
 
-post_deployment_steps:
-  - run_system_with_multiple_goals
-  - verify_outputs_are_grounded_in_memory
-  - check_human_escalation_on_low_confidence
+| Guardrail | Mechanism |
+|-----------|-----------|
+| Loop Prevention | Bounded execution steps |
+| Hallucination Control | Reflection-based checks |
+| Tool Failure Handling | Deterministic fallback |
+| Confidence Management | Human escalation |
+
+---
+
+## Usage
+
+### Local CLI
+```bash
+python src/main.py
+```
+
+### Streamlit UI
+```bash
+streamlit run app_streamlit.py
+```
+
+### Deployed UI
+https://congnitive-agent.streamlit.app/
+
+---
+
+## Repository Structure
+```
+Intern_Submissions/Saurabh_Jha/
+├── src/
+├── app_streamlit.py
+├── README.md
+├── examples/
+├── config/
+└── docs/
+```
+
+---
+
+## Status
+
+✓ Implementation complete  
+✓ Streamlit UI deployed  
+✓ Core requirements satisfied
