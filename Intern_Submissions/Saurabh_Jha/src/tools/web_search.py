@@ -4,23 +4,28 @@ from bs4 import BeautifulSoup
 
 def web_search(query: str):
     """
-    Perform a lightweight web search and return multiple independent snippets.
+    Perform a web search and return real titles, URLs, and snippets.
     """
-    url = f"https://duckduckgo.com/html/?q={query}"
-    response = requests.get(url, timeout=10)
+    search_url = f"https://duckduckgo.com/html/?q={query}"
+    response = requests.get(
+        search_url,
+        headers={"User-Agent": "Mozilla/5.0"},
+        timeout=10
+    )
+
     soup = BeautifulSoup(response.text, "html.parser")
 
-    snippets = []
+    results = []
 
-    results = soup.select(".result")[:5]
-    for r in results:
-        title = r.select_one(".result__a")
-        snippet = r.select_one(".result__snippet")
+    for r in soup.select(".result")[:5]:
+        title_tag = r.select_one(".result__a")
+        snippet_tag = r.select_one(".result__snippet")
 
-        if title and snippet:
-            snippets.append(
-                f"Source: {title.get_text(strip=True)} | "
-                f"Insight: {snippet.get_text(strip=True)}"
-            )
+        if title_tag:
+            results.append({
+                "title": title_tag.get_text(strip=True),
+                "url": title_tag.get("href"),
+                "snippet": snippet_tag.get_text(strip=True) if snippet_tag else ""
+            })
 
-    return snippets
+    return results
